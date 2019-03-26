@@ -1028,6 +1028,18 @@ describe 'Device Model', ->
 					m.chai.expect(_.find(result, { name: 'A' }).value).equal('a')
 					m.chai.expect(_.find(result, { name: 'B' }).value).equal('b')
 
+		# TODO: xginn8: left an `only` here for testing
+		describe.only 'balena.models.device.getSupervisorTargetState()', ->
+
+			it 'should be rejected if the device does not exist', ->
+				promise = balena.models.device.getSupervisorTargetState('asdfghjkl')
+				m.chai.expect(promise).to.be.rejectedWith('Device not found: asdfghjkl')
+
+			it 'should reflect the device\'s state', ->
+				balena.models.device.getSupervisorTargetState(@device.id).then (state) =>
+					m.chai.expect(state.name).to.equal(@device.name)
+					m.chai.expect(state.apps[@application.id].name).to.equal(@application.name)
+
 		describe 'balena.models.device.getSupervisorState()', ->
 
 			it 'should be rejected if the device does not exist', ->
